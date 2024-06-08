@@ -23,7 +23,7 @@ jobs:
           java-version: '20'
 
       - name: Set up GitHub Packages auth
-        run: echo "machine github.com login ${{ github.actor }} password ${{ secrets.GITHUB_TOKEN }}" > ~/.netrc
+        run: echo "machine github.com login ${{ github.actor }} password ${{ secrets.TERABYTE_LABS_TOKEN }}" > ~/.netrc
 
       - name: Build and deploy
         run: mvn -B clean deploy
