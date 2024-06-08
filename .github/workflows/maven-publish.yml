@@ -2,8 +2,7 @@ name: Release
 
 on:
   push:
-    tags:
-      - '[vV][0-9]+.[0-9]+.[0-9]+'
+    branches: [ main ]
 
 jobs:
   release:
@@ -19,18 +18,7 @@ jobs:
           distribution: 'adopt'
           java-version: '20'
 
-      - name: Set up GitHub Packages auth
+      - name: Publish package
+        run: mvn --batch-mode deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.TERABYTE_LABS_TOKEN }}
-        run: |
-          echo "machine github.com login ${{ github.actor }} password ${{ secrets.TERABYTE_LABS_TOKEN }}" > ~/.netrc
-          echo "machine maven.pkg.github.com login ${{ github.actor }} password ${{ secrets.TERABYTE_LABS_TOKEN }}" >> ~/.netrc
-
-      - name: Build and deploy
-        run: mvn -B clean deploy
-
-      - name: Prepare release
-        run: mvn -B release:prepare -Dresume=false
-
-      - name: Perform release
-        run: mvn -B release:perform
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
