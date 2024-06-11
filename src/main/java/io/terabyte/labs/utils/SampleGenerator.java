@@ -1,6 +1,10 @@
 package io.terabyte.labs.utils;
 
 import com.github.javafaker.Faker;
+import io.terabyte.labs.utils.annotation.SampleGenAddress;
+import io.terabyte.labs.utils.annotation.SampleGenEmail;
+import io.terabyte.labs.utils.annotation.SampleGenId;
+import io.terabyte.labs.utils.annotation.SampleGenNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,18 +46,43 @@ public class SampleGenerator {
         for (Field field : fields) {
             field.setAccessible(true);
             try {
-                if (field.getType() == String.class) {
+                if (field.isAnnotationPresent(SampleGenEmail.class)) {
+                    field.set(instance, faker.internet().emailAddress());
+                } else if (field.isAnnotationPresent(SampleGenId.class)) {
+                    SampleGenId idAnnotation = field.getAnnotation(SampleGenId.class);
+                    int start = idAnnotation.start();
+                    int end = idAnnotation.end();
+                    if (field.getType() == String.class) {
+                        field.set(instance, faker.internet().uuid());
+                    } else if (field.getType() == int.class || field.getType() == Integer.class) {
+                        field.set(instance, getNumberBetween(start, end));
+                    }
+                } else if (field.isAnnotationPresent(SampleGenAddress.class)) {
+                    field.set(instance, faker.address().fullAddress());
+                } else if (field.isAnnotationPresent(SampleGenNumber.class)) {
+                    SampleGenNumber numberAnnotation = field.getAnnotation(SampleGenNumber.class);
+                    double start = numberAnnotation.start();
+                    double end = numberAnnotation.end();
+                    switch (numberAnnotation.type()) {
+                        case INT:
+                            field.set(instance, getNumberBetween((int) start, (int) end));
+                            break;
+                        case FLOAT:
+                            field.set(instance, getFloatBetween((float) start, (float) end));
+                            break;
+                        case DOUBLE:
+                            field.set(instance, getDoubleBetween(start, end));
+                            break;
+                        case LONG:
+                            field.set(instance, getLongBetween((long) start, (long) end));
+                            break;
+                    }
+                } else if (field.getType() == String.class) {
                     field.set(instance, generateString(field.getName()));
-                } else if (field.getType() == int.class || field.getType() == Integer.class) {
-                    field.set(instance, getNumberBetween(1, 25000));
-                } else if (field.getType() == long.class || field.getType() == Long.class) {
-                    field.set(instance, getNumberBetween(1, 25000));
-                } else if (field.getType() == double.class || field.getType() == Double.class) {
-                    field.set(instance, faker.number().randomNumber());
                 } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                     field.set(instance, faker.bool().bool());
                 } else if (field.getType() == LocalDate.class) {
-                    field.set(instance, generateLocalDate()); // Date in the last 40 years
+                    field.set(instance, generateLocalDate());
                 } else if (field.getType() == List.class) {
                     ParameterizedType listType = (ParameterizedType) field.getGenericType();
                     Class<?> listClass = (Class<?>) listType.getActualTypeArguments()[0];
@@ -133,6 +162,18 @@ public class SampleGenerator {
         return faker.number().numberBetween(lowerBound, upperBound);
     }
 
+    public static long getLongBetween(long start, long end) {
+        return faker.number().numberBetween(start, end);
+    }
+
+    private static double getDoubleBetween(double start, double end) {
+        return start + random.nextDouble() * (end - start);
+    }
+
+    private static float getFloatBetween(float start, float end) {
+        return start + random.nextFloat() * (end - start);
+    }
+
     public static LocalDate generateLocalDate() {
         Date birthday = faker.date().birthday();
         Calendar calendar = Calendar.getInstance();
@@ -168,7 +209,7 @@ public class SampleGenerator {
             return faker.cat().breed();
         } else if (choice == 12) {
             return faker.company().name();
-        } else  {
+        } else {
             return faker.company().catchPhrase();
         }
     }
