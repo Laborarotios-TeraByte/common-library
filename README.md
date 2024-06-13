@@ -17,13 +17,13 @@ git clone https://github.com/tu-usuario/tu-repositorio.git
 SampleGenerator te permite generar una lista de objetos poblados con datos ficticios.
 
 ```java
-import io.terabyte.labs.utils.SampleGenerator;
+import io.terabyte.labs.utils.TheGenerator;
 
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<YourClass> samples = SampleGenerator.supplyInformation(YourClass.class, 10);
+        List<YourClass> samples = TheGenerator.supplyInformation(YourClass.class, 10);
         samples.forEach(System.out::println);
     }
 }
