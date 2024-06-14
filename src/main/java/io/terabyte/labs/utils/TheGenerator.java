@@ -4,11 +4,13 @@ import com.github.javafaker.Faker;
 import io.terabyte.labs.utils.annotation.SampleGenAddress;
 import io.terabyte.labs.utils.annotation.SampleGenEmail;
 import io.terabyte.labs.utils.annotation.SampleGenId;
+import io.terabyte.labs.utils.annotation.SampleGenLocalDate;
 import io.terabyte.labs.utils.annotation.SampleGenNumber;
 import io.terabyte.labs.utils.annotation.SampleGenPhoneNumber;
 import io.terabyte.labs.utils.annotation.SampleGenRandomString;
 import io.terabyte.labs.utils.ifc.decorator.NumberSampleGeneratorDecorator;
 import io.terabyte.labs.utils.ifc.decorator.StringSampleGeneratorDecorator;
+import io.terabyte.labs.utils.model.StringTypeFaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,20 +138,36 @@ public class TheGenerator {
                             break;
                     }
                 } else if (field.isAnnotationPresent(SampleGenRandomString.class)) {
+                    SampleGenRandomString sampleGenRandomString = field.getAnnotation(SampleGenRandomString.class);
+                    StringTypeFaker stringTypeFaker = sampleGenRandomString.typeFakerGenerator();
                     if (field.getType() == List.class) {
-                        field.set(instance, stringSampleGeneratorDecorator.generateRandomStrings(12));
+                        field.set(instance, stringSampleGeneratorDecorator.generateRandomStrings(12, stringTypeFaker));
                     }else {
-                        field.set(instance, stringSampleGeneratorDecorator.generateRandomString());
+                        field.set(instance, stringSampleGeneratorDecorator.generateRandomString(stringTypeFaker));
                     }
                 } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
                     field.set(instance, faker.bool().bool());
-                } else if (field.getType() == LocalDate.class) {
-                    field.set(instance, generateLocalDate());
+                } else if (field.isAnnotationPresent(SampleGenLocalDate.class)) {
+                    SampleGenLocalDate sampleGenLocalDate = field.getAnnotation(SampleGenLocalDate.class);
+                    int numberOfElements = sampleGenLocalDate.numberOfElements();
+                    if (field.getType() == List.class) {
+                        field.set(instance, generateLocalDates(numberOfElements));
+                    }else {
+                        field.set(instance, generateLocalDate());
+                    }
                 }
             } catch (Exception e) {
                 logger.error("Error Al setear field {}", field.getName());
             }
         }
+    }
+
+    private List<LocalDate> generateLocalDates(int numOfLocalDates) {
+        List<LocalDate> dates = new ArrayList<>();
+        for (int i = 0; i < numOfLocalDates; i++) {
+            dates.add(generateLocalDate());
+        }
+        return dates;
     }
 
     public static LocalDate generateLocalDate() {

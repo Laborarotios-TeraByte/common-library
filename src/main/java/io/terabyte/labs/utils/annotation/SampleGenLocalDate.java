@@ -1,13 +1,12 @@
 package io.terabyte.labs.utils.annotation;
 
-
-import io.terabyte.labs.utils.model.StringTypeFaker;
-
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SampleGenRandomString {
-    StringTypeFaker typeFakerGenerator() default StringTypeFaker.RANDOM;
+@Target(ElementType.FIELD)
+public @interface SampleGenLocalDate {
     int numberOfElements() default 12;
 }

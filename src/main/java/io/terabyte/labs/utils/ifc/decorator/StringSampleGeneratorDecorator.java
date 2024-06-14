@@ -1,6 +1,7 @@
 package io.terabyte.labs.utils.ifc.decorator;
 
 import com.github.javafaker.Faker;
+import io.terabyte.labs.utils.model.StringTypeFaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,36 +38,57 @@ public class StringSampleGeneratorDecorator {
         return faker.phoneNumber().cellPhone();
     }
 
-    public String generateRandomString() {
-        int choice = random.nextInt(20);
-        if (choice == 0) {
-            return faker.artist().name();
-        } else if (choice == 1) {
-            return faker.ancient().hero();
-        } else if (choice == 2) {
-            return faker.animal().name();
-        } else if (choice == 3) {
-            return faker.app().name();
-        } else if (choice == 4) {
-            return faker.book().title();
-        } else if (choice == 5) {
-            return faker.book().author();
-        } else if (choice == 6) {
-            return faker.ancient().god();
-        } else if (choice == 7) {
-            return faker.aviation().aircraft();
-        } else if (choice == 8) {
-            return faker.aviation().airport();
-        } else if (choice == 9) {
-            return faker.beer().name();
-        } else if (choice == 10) {
-            return faker.cat().name();
-        } else if (choice == 11) {
-            return faker.cat().breed();
-        } else if (choice == 12) {
-            return faker.company().name();
-        } else {
-            return faker.company().catchPhrase();
+    public String generateRandomString(StringTypeFaker stringTypeFaker) {
+
+        switch (stringTypeFaker) {
+            case CAT_NAME -> {
+                return faker.cat().name();
+            }
+            case BEER_NAME -> {
+                return faker.beer().name();
+            }
+            case BOOK_ISBN_10 -> {
+                return faker.code().isbn10(true);
+            }
+            case ANCIENT_GOD -> {
+                return faker.ancient().god();
+            }
+            case ANIMAL_NAME -> {
+                return faker.animal().name();
+            }
+            case ARTIST_NAME -> {
+                return faker.artist().name();
+            }
+            case BOOK_AUTHOR -> {
+                return faker.book().author();
+            }
+            case BOOK_TITTLE -> {
+                return faker.book().title();
+            }
+            case ANCIENT_HERO -> {
+                return faker.ancient().hero();
+            }
+            case BOOK_ISBN_13 -> {
+                return faker.code().isbn13(true);
+            }
+            case COMPANY_NAME -> {
+                return faker.company().name();
+            }
+            case APPLICATION_NAME -> {
+                return faker.app().name();
+            }
+            case AVIATION_AIRPORT -> {
+                return faker.aviation().airport();
+            }
+            case AVIATION_AIRCRAFT -> {
+                return faker.aviation().aircraft();
+            }
+            case COMPANY_CATCH_PHRASE -> {
+                return faker.company().catchPhrase();
+            }
+            default -> {
+                return faker.aquaTeenHungerForce().character();
+            }
         }
     }
 
@@ -102,10 +124,10 @@ public class StringSampleGeneratorDecorator {
         return phoneNumbers;
     }
 
-    public List<String> generateRandomStrings(int numberOfStrs) {
+    public List<String> generateRandomStrings(int numberOfStrs, StringTypeFaker stringTypeFaker) {
         List<String> strs = new ArrayList<>();
         for (int i = 0; i < numberOfStrs; i++) {
-            strs.add(generateRandomString());
+            strs.add(generateRandomString(stringTypeFaker));
         }
         return strs;
     }

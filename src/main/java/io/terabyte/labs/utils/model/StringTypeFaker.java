@@ -1,0 +1,19 @@
+package io.terabyte.labs.utils.model;
+
+public enum StringTypeFaker {
+    BOOK_TITTLE,
+    ARTIST_NAME,
+    ANCIENT_HERO,
+    ANCIENT_GOD,
+    ANIMAL_NAME,
+    APPLICATION_NAME,
+    BOOK_AUTHOR,
+    BOOK_ISBN_13,
+    AVIATION_AIRCRAFT,
+    AVIATION_AIRPORT,
+    BEER_NAME,
+    CAT_NAME,
+    COMPANY_NAME,
+    COMPANY_CATCH_PHRASE,
+    BOOK_ISBN_10, RANDOM
+}
