@@ -1,121 +1,158 @@
-# SampleGenerator
+# Sample Generator Utilities
 
-SampleGenerator es una utilidad para generar datos de muestra en Java, utilizando la librería `java-faker`. Esta librería puede ser útil para crear datos ficticios para pruebas y demostraciones.
+This project contains classes and annotations to generate random sample data for various types of fields, including numbers, strings, emails, addresses, and more. It leverages the `Faker` library to generate realistic and random data.
 
-## Instalación
+## Classes
 
-Puedes incluir SampleGenerator en tu proyecto clonando este repositorio y agregando los archivos fuente a tu proyecto de Java.
+### NumberSampleGeneratorDecorator
 
-```bash
-git clone https://github.com/tu-usuario/tu-repositorio.git
-```
+The `NumberSampleGeneratorDecorator` class provides methods to generate random numbers of various types within specified bounds.
 
-## Uso
+#### Methods
 
-### Generación de Listas de Objetos
+- `Integer generateInt(int lowerBound, int upperBound)`
+    - Generates a random integer between the specified bounds.
 
-SampleGenerator te permite generar una lista de objetos poblados con datos ficticios.
+- `List<Integer> generateInts(int numberOfElements, int lowerBound, int upperBound)`
+    - Generates a list of random integers.
+
+- `Double generateDouble(double lowerBound, double upperBound)`
+    - Generates a random double between the specified bounds.
+
+- `List<Double> generateDoubles(int numberOfElements, double lowerBound, double upperBound)`
+    - Generates a list of random doubles.
+
+- `Long generateLong(long lowerBound, long upperBound)`
+    - Generates a random long between the specified bounds.
+
+- `List<Long> generateLongs(int numberOfElements, long lowerBound, long upperBound)`
+    - Generates a list of random longs.
+
+- `Float generateFloat(float start, float end)`
+    - Generates a random float between the specified bounds.
+
+- `List<Float> generateFloats(int numberOfFloats, float start, float end)`
+    - Generates a list of random floats.
+
+### StringSampleGeneratorDecorator
+
+The `StringSampleGeneratorDecorator` class provides methods to generate random strings, including email addresses, UUIDs, addresses, phone numbers, and more.
+
+#### Methods
+
+- `String generateEmail()`
+    - Generates a random email address.
+
+- `List<String> generateEmailList(int numberOfEmails)`
+    - Generates a list of random email addresses.
+
+- `String generateUUID()`
+    - Generates a random UUID.
+
+- `String generateAddress()`
+    - Generates a random address.
+
+- `String generatePhoneNumber()`
+    - Generates a random phone number.
+
+- `String generateCellPhoneNumber()`
+    - Generates a random cell phone number.
+
+- `String generateRandomString(StringTypeFaker stringTypeFaker)`
+    - Generates a random string based on the specified type.
+
+- `List<String> generateUUIDList(int numberOfUUIDs)`
+    - Generates a list of random UUIDs.
+
+- `List<String> generateAddressList(int numberOfAddresses)`
+    - Generates a list of random addresses.
+
+- `List<String> generatePhoneNumbers(int numberOfPhones)`
+    - Generates a list of random phone numbers.
+
+- `List<String> generateCellPhoneNumbers(int numberOfCells)`
+    - Generates a list of random cell phone numbers.
+
+- `List<String> generateRandomStrings(int numberOfStrs, StringTypeFaker stringTypeFaker)`
+    - Generates a list of random strings based on the specified type.
+
+### TheGenerator
+
+The `TheGenerator` class utilizes the decorators and annotations to populate fields of objects with random data.
+
+#### Methods
+
+- `TheGenerator()`
+    - Constructs a new TheGenerator instance.
+
+- `<T> List<T> supplyInformation(Class<T> clazz, int numberOfElements)`
+    - Supplies a list of populated instances of the specified class.
+
+- `<T> void populateFields(T instance)`
+    - Populates the fields of the given instance with generated data based on annotations.
+
+- `List<LocalDate> generateLocalDates(int numOfLocalDates)`
+    - Generates a list of random LocalDate instances.
+
+- `LocalDate generateLocalDate()`
+    - Generates a random LocalDate instance.
+
+### Annotations
+
+#### SampleGenAddress
+
+The `@SampleGenAddress` annotation is used to indicate that a field should be populated with a generated address.
+
+#### SampleGenEmail
+
+The `@SampleGenEmail` annotation is used to indicate that a field should be populated with a generated email address.
+
+#### SampleGenId
+
+The `@SampleGenId` annotation is used to indicate that a field should be populated with a generated ID.
+
+#### SampleGenLocalDate
+
+The `@SampleGenLocalDate` annotation is used to indicate that a field should be populated with a generated LocalDate.
+
+#### SampleGenNumber
+
+The `@SampleGenNumber` annotation is used to indicate that a field should be populated with a generated number.
+
+#### SampleGenPhoneNumber
+
+The `@SampleGenPhoneNumber` annotation is used to indicate that a field should be populated with a generated phone number.
+
+#### SampleGenRandomString
+
+The `@SampleGenRandomString` annotation is used to indicate that a field should be populated with a generated random string.
+
+## Usage
+
+To use these classes and annotations, include the `Faker` library in your project and annotate the fields you want to populate with sample data. Use the decorators and `TheGenerator` class to generate random values and populate objects.
+
+### Example
 
 ```java
-import io.terabyte.labs.utils.TheGenerator;
+public class ExampleClass {
+    @SampleGenEmail
+    private String email;
 
-import java.util.List;
+    @SampleGenId
+    private int id;
+
+    @SampleGenAddress
+    private String address;
+
+    @SampleGenPhoneNumber
+    private String phoneNumber;
+}
 
 public class Main {
     public static void main(String[] args) {
-        List<YourClass> samples = TheGenerator.supplyInformation(YourClass.class, 10);
-        samples.forEach(System.out::println);
+        TheGenerator generator = new TheGenerator();
+        List<ExampleClass> examples = generator.supplyInformation(ExampleClass.class, 10);
+        examples.forEach(System.out::println);
     }
 }
-```
-
-### Ejemplo de Clase
-
-A continuación, se muestra un ejemplo de cómo debería verse tu clase para utilizarla con SampleGenerator.
-
-```java
-public class YourClass {
-    private String name;
-    private int age;
-    private boolean active;
-
-    // Getters y Setters
-
-    @Override
-    public String toString() {
-        return "YourClass{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", active=" + active +
-                '}';
-    }
-}
-```
-
-### Tipos de Datos Soportados
-
-SampleGenerator puede generar datos ficticios para los siguientes tipos de datos:
-- `String`
-- `int` / `Integer`
-- `long` / `Long`
-- `double` / `Double`
-- `boolean` / `Boolean`
-- `LocalDate`
-- `List<String>`
-- `List<Integer>`
-- `List<Double>`
-- `List<LocalDate>`
-
-### Ejemplos de Uso de Faker
-
-SampleGenerator utiliza `java-faker` para generar datos ficticios. Aquí hay algunos ejemplos de cómo se utilizan los métodos de Faker en SampleGenerator:
-
-```java
-private static String generateString(String fieldName) {
-    if (fieldName.toLowerCase().contains("id")) {
-        return faker.internet().uuid();
-    } else if (fieldName.toLowerCase().contains("email")) {
-        return faker.internet().emailAddress();
-    } else if (fieldName.toLowerCase().contains("address")) {
-        return faker.address().fullAddress();
-    } else {
-        return getRandomStringFromFaker();
-    }
-}
-```
-
-## Dependencias
-
-- [java-faker](https://github.com/DiUS/java-faker)
-- [SLF4J](http://www.slf4j.org/)
-
-Asegúrate de agregar estas dependencias a tu proyecto. Si estás usando Maven, puedes incluirlas en tu `pom.xml`:
-
-```xml
-<dependency>
-    <groupId>com.github.javafaker</groupId>
-    <artifactId>javafaker</artifactId>
-    <version>1.0.2</version>
-</dependency>
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-    <version>1.7.30</version>
-</dependency>
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-simple</artifactId>
-    <version>1.7.30</version>
-</dependency>
-```
-
-## Contribuir
-
-Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para mejorar el proyecto.
-
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.
-```
-Este README.md proporciona una guía clara sobre cómo instalar, usar y contribuir a tu librería SampleGenerator. Asegúrate de ajustar los detalles específicos, como el nombre del repositorio y las clases de ejemplo, según tus necesidades.
 ```

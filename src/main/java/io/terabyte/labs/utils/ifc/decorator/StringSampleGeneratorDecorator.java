@@ -10,10 +10,22 @@ import java.util.Random;
 public class StringSampleGeneratorDecorator {
     private Faker faker = new Faker();
     private Random random = new Random();
+
+    /**
+     * Generates a random email address.
+     *
+     * @return A random email address.
+     */
     public String generateEmail() {
         return faker.internet().emailAddress();
     }
 
+    /**
+     * Generates a list of random email addresses.
+     *
+     * @param numberOfEmails The number of email addresses to generate.
+     * @return A list of random email addresses.
+     */
     public List<String> generateEmailList(int numberOfEmails) {
         List<String> emails = new ArrayList<>();
         for (int i = 0; i < numberOfEmails; i++) {
@@ -22,22 +34,48 @@ public class StringSampleGeneratorDecorator {
         return emails;
     }
 
+    /**
+     * Generates a random UUID.
+     *
+     * @return A random UUID.
+     */
     public String generateUUID() {
         return faker.internet().uuid();
     }
 
+    /**
+     * Generates a random address.
+     *
+     * @return A random address.
+     */
     public String generateAddress() {
         return faker.address().fullAddress();
     }
 
+    /**
+     * Generates a random phone number.
+     *
+     * @return A random phone number.
+     */
     public String generatePhoneNumber() {
         return faker.phoneNumber().phoneNumber();
     }
 
+    /**
+     * Generates a random cell phone number.
+     *
+     * @return A random cell phone number.
+     */
     public String generateCellPhoneNumber() {
         return faker.phoneNumber().cellPhone();
     }
 
+    /**
+     * Generates a random string based on the specified type.
+     *
+     * @param stringTypeFaker The type of string to generate.
+     * @return A random string of the specified type.
+     */
     public String generateRandomString(StringTypeFaker stringTypeFaker) {
 
         switch (stringTypeFaker) {
@@ -92,6 +130,12 @@ public class StringSampleGeneratorDecorator {
         }
     }
 
+    /**
+     * Generates a list of random UUIDs.
+     *
+     * @param numberOfUUIDs The number of UUIDs to generate.
+     * @return A list of random UUIDs.
+     */
     public List<String> generateUUIDList(int numberOfUUIDs) {
         List<String> uuids = new ArrayList<>();
         for (int i = 0; i < numberOfUUIDs; i++) {
@@ -100,6 +144,12 @@ public class StringSampleGeneratorDecorator {
         return uuids;
     }
 
+    /**
+     * Generates a list of random addresses.
+     *
+     * @param numberOfAddresses The number of addresses to generate.
+     * @return A list of random addresses.
+     */
     public List<String> generateAddressList(int numberOfAddresses) {
         List<String> addresses = new ArrayList<>();
         for (int i = 0; i < numberOfAddresses; i++) {
@@ -108,6 +158,12 @@ public class StringSampleGeneratorDecorator {
         return addresses;
     }
 
+    /**
+     * Generates a list of random phone numbers.
+     *
+     * @param numberOfPhones The number of phone numbers to generate.
+     * @return A list of random phone numbers.
+     */
     public List<String> generatePhoneNumbers(int numberOfPhones) {
         List<String> phoneNumbers = new ArrayList<>();
         for (int i = 0; i < numberOfPhones; i++) {
@@ -116,6 +172,12 @@ public class StringSampleGeneratorDecorator {
         return phoneNumbers;
     }
 
+    /**
+     * Generates a list of random cell phone numbers.
+     *
+     * @param numberOfCells The amount cell phone numbers to generate.
+     * @return A list of random cell phone numbers.
+     */
     public List<String> generateCellPhoneNumbers(int numberOfCells) {
         List<String> phoneNumbers = new ArrayList<>();
         for (int i = 0; i < numberOfCells; i++) {
@@ -124,6 +186,13 @@ public class StringSampleGeneratorDecorator {
         return phoneNumbers;
     }
 
+    /**
+     * Generates a list of random strings based on the specified type.
+     *
+     * @param numberOfStrs    The number of strings to generate.
+     * @param stringTypeFaker The type of string to generate.
+     * @return A list of random strings of the specified type.
+     */
     public List<String> generateRandomStrings(int numberOfStrs, StringTypeFaker stringTypeFaker) {
         List<String> strs = new ArrayList<>();
         for (int i = 0; i < numberOfStrs; i++) {

@@ -25,6 +25,9 @@ import java.util.List;
 public class TheGenerator {
     private static final Logger logger = LoggerFactory.getLogger(TheGenerator.class);
 
+    /**
+     * Constructs a new TheGenerator instance.
+     */
     public TheGenerator() {
         this.numberSampleGeneratorDecorator = new NumberSampleGeneratorDecorator();
         this.stringSampleGeneratorDecorator = new StringSampleGeneratorDecorator();
@@ -34,6 +37,14 @@ public class TheGenerator {
     private NumberSampleGeneratorDecorator numberSampleGeneratorDecorator;
     private StringSampleGeneratorDecorator stringSampleGeneratorDecorator;
 
+    /**
+     * Supplies a list of populated instances of the specified class.
+     *
+     * @param <T> The type of the class.
+     * @param clazz The class to instantiate and populate.
+     * @param numberOfElements The number of instances to create.
+     * @return A list of populated instances of the specified class.
+     */
     public <T> List<T> supplyInformation(Class<T> clazz, int numberOfElements) {
         List<T> list = new ArrayList<>();
         for (int i = 0; i < numberOfElements; i++) {
@@ -48,6 +59,12 @@ public class TheGenerator {
         return list;
     }
 
+    /**
+     * Populates the fields of the given instance with generated data based on annotations.
+     *
+     * @param <T> The type of the instance.
+     * @param instance The instance to populate.
+     */
     private <T> void populateFields(T instance) {
         Field[] fields = instance.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -162,6 +179,12 @@ public class TheGenerator {
         }
     }
 
+    /**
+     * Generates a list of random LocalDate instances.
+     *
+     * @param numOfLocalDates The number of LocalDate instances to generate.
+     * @return A list of random LocalDate instances.
+     */
     private List<LocalDate> generateLocalDates(int numOfLocalDates) {
         List<LocalDate> dates = new ArrayList<>();
         for (int i = 0; i < numOfLocalDates; i++) {
@@ -170,6 +193,11 @@ public class TheGenerator {
         return dates;
     }
 
+    /**
+     * Generates a random LocalDate instance.
+     *
+     * @return A random LocalDate instance.
+     */
     public static LocalDate generateLocalDate() {
         Date birthday = faker.date().birthday();
         Calendar calendar = Calendar.getInstance();
