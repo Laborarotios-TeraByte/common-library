@@ -33,6 +33,13 @@ public class TheGenerator {
         this.stringSampleGeneratorDecorator = new StringSampleGeneratorDecorator();
     }
 
+    private TheGenerator(NumberSampleGeneratorDecorator numberSampleGeneratorDecorator,
+                         StringSampleGeneratorDecorator stringSampleGeneratorDecorator) {
+        this.numberSampleGeneratorDecorator = numberSampleGeneratorDecorator;
+        this.stringSampleGeneratorDecorator = stringSampleGeneratorDecorator;
+    }
+
+
     private static final Faker faker = new Faker();
     private NumberSampleGeneratorDecorator numberSampleGeneratorDecorator;
     private StringSampleGeneratorDecorator stringSampleGeneratorDecorator;
@@ -40,8 +47,8 @@ public class TheGenerator {
     /**
      * Supplies a list of populated instances of the specified class.
      *
-     * @param <T> The type of the class.
-     * @param clazz The class to instantiate and populate.
+     * @param <T>              The type of the class.
+     * @param clazz            The class to instantiate and populate.
      * @param numberOfElements The number of instances to create.
      * @return A list of populated instances of the specified class.
      */
@@ -62,7 +69,7 @@ public class TheGenerator {
     /**
      * Populates the fields of the given instance with generated data based on annotations.
      *
-     * @param <T> The type of the instance.
+     * @param <T>      The type of the instance.
      * @param instance The instance to populate.
      */
     private <T> void populateFields(T instance) {
@@ -97,8 +104,10 @@ public class TheGenerator {
                         }
                     }
                 } else if (field.isAnnotationPresent(SampleGenAddress.class)) {
+                    SampleGenAddress sampleGenAddress = field.getAnnotation(SampleGenAddress.class);
                     if (field.getType() == List.class) {
-                        field.set(instance, stringSampleGeneratorDecorator.generateAddressList(12));
+                        int numberOfAddresses = sampleGenAddress.numberOfAddresses();
+                        field.set(instance, stringSampleGeneratorDecorator.generateAddressList(numberOfAddresses));
                     } else {
                         field.set(instance, stringSampleGeneratorDecorator.generateAddress());
                     }
@@ -138,11 +147,12 @@ public class TheGenerator {
                     }
                 } else if (field.isAnnotationPresent(SampleGenPhoneNumber.class)) {
                     SampleGenPhoneNumber sampleGenPhoneNumber = field.getAnnotation(SampleGenPhoneNumber.class);
+                    int numberOfPhones = sampleGenPhoneNumber.numberOfPhones();
                     switch (sampleGenPhoneNumber.type()) {
                         case PHONE:
                             if (field.getType() == List.class) {
-                                field.set(instance, stringSampleGeneratorDecorator.generatePhoneNumbers(12));
-                            }else {
+                                field.set(instance, stringSampleGeneratorDecorator.generatePhoneNumbers(numberOfPhones));
+                            } else {
                                 field.set(instance, stringSampleGeneratorDecorator.generatePhoneNumber());
                             }
                             break;
@@ -158,8 +168,9 @@ public class TheGenerator {
                     SampleGenRandomString sampleGenRandomString = field.getAnnotation(SampleGenRandomString.class);
                     StringTypeFaker stringTypeFaker = sampleGenRandomString.typeFakerGenerator();
                     if (field.getType() == List.class) {
-                        field.set(instance, stringSampleGeneratorDecorator.generateRandomStrings(12, stringTypeFaker));
-                    }else {
+                        int numberOfElements = sampleGenRandomString.numberOfElements();
+                        field.set(instance, stringSampleGeneratorDecorator.generateRandomStrings(numberOfElements, stringTypeFaker));
+                    } else {
                         field.set(instance, stringSampleGeneratorDecorator.generateRandomString(stringTypeFaker));
                     }
                 } else if (field.getType() == boolean.class || field.getType() == Boolean.class) {
@@ -169,7 +180,7 @@ public class TheGenerator {
                     int numberOfElements = sampleGenLocalDate.numberOfElements();
                     if (field.getType() == List.class) {
                         field.set(instance, generateLocalDates(numberOfElements));
-                    }else {
+                    } else {
                         field.set(instance, generateLocalDate());
                     }
                 }
@@ -204,4 +215,28 @@ public class TheGenerator {
         calendar.setTime(birthday);
         return LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
     }
+
+    public static class Builder {
+        private NumberSampleGeneratorDecorator numberSampleGeneratorDecorator = new NumberSampleGeneratorDecorator();
+        private StringSampleGeneratorDecorator stringSampleGeneratorDecorator = new StringSampleGeneratorDecorator();
+
+        public Builder withNumberSampleGeneratorDecorator(NumberSampleGeneratorDecorator numberSampleGeneratorDecorator) {
+            this.numberSampleGeneratorDecorator = numberSampleGeneratorDecorator;
+            return this;
+        }
+
+        public Builder withStringSampleGeneratorDecorator(StringSampleGeneratorDecorator stringSampleGeneratorDecorator) {
+            this.stringSampleGeneratorDecorator = stringSampleGeneratorDecorator;
+            return this;
+        }
+
+        public TheGenerator build() {
+            return new TheGenerator(numberSampleGeneratorDecorator, stringSampleGeneratorDecorator);
+        }
+
+        public TheGenerator buildWithDefaults() {
+            return new TheGenerator(new NumberSampleGeneratorDecorator(), new StringSampleGeneratorDecorator());
+        }
+    }
+
 }

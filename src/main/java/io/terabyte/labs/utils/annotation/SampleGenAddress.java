@@ -8,4 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface SampleGenAddress {
+    int numberOfAddresses() default 12;
 }

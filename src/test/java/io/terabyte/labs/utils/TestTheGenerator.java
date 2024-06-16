@@ -8,8 +8,10 @@ import io.terabyte.labs.utils.annotation.SampleGenNumber;
 import io.terabyte.labs.utils.annotation.SampleGenPhoneNumber;
 import io.terabyte.labs.utils.annotation.SampleGenRandomString;
 import io.terabyte.labs.utils.model.StringTypeFaker;
+import io.terabyte.labs.utils.model.TelephoneType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -19,10 +21,16 @@ class TestTheGenerator {
 
     @Test
     void testSampleGenerator() {
-        TheGenerator generator = new TheGenerator();
-        generator.supplyInformation(MyClass.class, 5)
-          .forEach(System.out::println);
+        TheGenerator generator = new TheGenerator.Builder().buildWithDefaults();
+        List<MyClass> myClasses = generator.supplyInformation(MyClass.class, 5);
+        Assertions.assertNotNull(myClasses);
+        Assertions.assertEquals(5, myClasses.size());
+        Assertions.assertInstanceOf(MyClass.class, myClasses.get(0));
+        Assertions.assertInstanceOf(Integer.class, myClasses.get(0).getId());
+        Assertions.assertTrue(myClasses.get(0).getId() >= 1000);
+        Assertions.assertTrue(myClasses.get(0).getId() <= 9999);
     }
+
 }
 
 class MyClass {
@@ -69,6 +77,166 @@ class MyClass {
     private List<String> orderIds;
     @SampleGenEmail
     private List<String> orderEmails;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNameId() {
+        return nameId;
+    }
+
+    public void setNameId(String nameId) {
+        this.nameId = nameId;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+    public List<String> getEmployeeNames() {
+        return employeeNames;
+    }
+
+    public void setEmployeeNames(List<String> employeeNames) {
+        this.employeeNames = employeeNames;
+    }
+
+    public List<String> getIsbns() {
+        return isbns;
+    }
+
+    public void setIsbns(List<String> isbns) {
+        this.isbns = isbns;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
+
+    public List<Integer> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Integer> scores) {
+        this.scores = scores;
+    }
+
+    public List<Double> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Double> prices) {
+        this.prices = prices;
+    }
+
+    public List<LocalDate> getImportantDates() {
+        return importantDates;
+    }
+
+    public void setImportantDates(List<LocalDate> importantDates) {
+        this.importantDates = importantDates;
+    }
+
+    public List<String> getOrderIds() {
+        return orderIds;
+    }
+
+    public void setOrderIds(List<String> orderIds) {
+        this.orderIds = orderIds;
+    }
+
+    public List<String> getOrderEmails() {
+        return orderEmails;
+    }
+
+    public void setOrderEmails(List<String> orderEmails) {
+        this.orderEmails = orderEmails;
+    }
 
     @Override
     public String toString() {

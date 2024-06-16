@@ -9,5 +9,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SampleGenRandomString {
     StringTypeFaker typeFakerGenerator() default StringTypeFaker.RANDOM;
-    int numberOfElements() default 12;
+    int numberOfElements() default 5;
 }

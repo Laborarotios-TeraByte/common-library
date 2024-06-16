@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface SampleGenPhoneNumber {
     TelephoneType type() default TelephoneType.PHONE;
+    int numberOfPhones() default 10;
 }
